@@ -112,8 +112,7 @@ export default function ImageCarousel({
   }, []);
 
   // ────────────────────────────────────────────────
-  // 2. Center-focus visual effect
-  //    Reads only from refs — safe to call from RAF with no stale-closure risk.
+  // 2. Center-focus visual effect (Enhanced Focal Scaling)
   // ────────────────────────────────────────────────
   const applyCenterFocus = useCallback((x: number) => {
     const sw = swRef.current;
@@ -122,7 +121,7 @@ export default function ImageCarousel({
     if (sw <= 0) return;
 
     const viewportCenter = window.innerWidth / 2;
-    const influence = (sw + sg) * 1.1;
+    const influence = (sw + sg) * 1.5;
 
     slideRefs.current.forEach((slide, i) => {
       if (!slide) return;
@@ -130,14 +129,16 @@ export default function ImageCarousel({
       const dist = Math.abs(center - viewportCenter);
       const t = Math.min(dist / influence, 1);
 
+      // Strong focal scaling: center is 1.25x, edges are heavily scaled down and faded
       gsap.set(slide, {
-        scale: 1.18 - t * 0.26, // 1.18 at center → 0.92 at edge
-        opacity: 1 - t * 0.22, // 1.00 at center → 0.78 at edge
+        scale: 1.25 - t * 0.45,
+        opacity: 1 - t * 0.6,
+        rotateY: (center - viewportCenter) * 0.02, // slight 3D curl 
         zIndex: Math.round((1 - t) * 20) + 1,
         force3D: true,
       });
     });
-  }, []); // intentionally empty — only uses refs
+  }, []);
 
   // ────────────────────────────────────────────────
   // 3. Initialize position once dimensions are ready
@@ -405,22 +406,61 @@ export default function ImageCarousel({
               if (i !== activeIndex) goTo(i);
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={getImageUrl(project.image_url, project.category)}
-              onError={handleImageError(project.category)}
-              alt={project.title}
-              draggable={false}
-              style={{
-                display: "block",
-                maxWidth: "100%",
-                maxHeight: `${maxImgHeight}px`,
-                width: "auto",
-                height: "auto",
-                objectFit: "contain",
-                pointerEvents: "none",
-              }}
-            />
+            {project.video_url ? (
+              <video
+                ref={(el) => {
+                  // Play only if it is the actively focused slide
+                  if (el) {
+                    if (i === activeIndex) {
+                      el.play().catch(() => { });
+                    } else {
+                      el.pause();
+                    }
+                  }
+                }}
+                src={project.video_url}
+                loop
+                muted
+                playsInline
+                style={{
+                  display: "block",
+                  maxWidth: "100%",
+                  maxHeight: `${maxImgHeight}px`,
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                  pointerEvents: "none",
+                }}
+              />
+            ) : project.category === "RESEARCH" ? (
+              <div
+                className="flex items-center justify-center font-mono text-sm tracking-widest text-foreground opacity-30 select-none uppercase border border-foreground/10"
+                style={{
+                  width: "300px",
+                  height: `${Math.min(maxImgHeight, 400)}px`,
+                  pointerEvents: "none",
+                }}
+              >
+                [ Coming Soon ]
+              </div>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={getImageUrl(project.image_url, project.category)}
+                onError={handleImageError(project.category)}
+                alt={project.title}
+                draggable={false}
+                style={{
+                  display: "block",
+                  maxWidth: "100%",
+                  maxHeight: `${maxImgHeight}px`,
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
           </div>
         ))}
       </div>

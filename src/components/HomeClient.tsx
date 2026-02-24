@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import MenuOverlay from "@/components/MenuOverlay";
 import ImageCarousel from "@/components/ImageCarousel";
 import GridView from "@/components/GridView";
+import Preloader from "@/components/Preloader";
 import { Project } from "@/types/project";
 
 interface HomeClientProps {
@@ -13,20 +14,24 @@ interface HomeClientProps {
 }
 
 /**
- * Deduplicate projects by image_url — keeps the first occurrence only.
- * This prevents the same image from appearing multiple times in the
- * carousel or grid when different category entries share an image.
+/**
+ * Deduplicate projects by video_url or image_url — keeps the first occurrence only.
+ * This prevents the same media from appearing multiple times in the
+ * carousel or grid when different category entries share a media asset.
  */
-function deduplicateByImage(items: Project[]): Project[] {
+function deduplicateByMedia(items: Project[]): Project[] {
   const seen = new Set<string>();
   return items.filter((p) => {
-    if (seen.has(p.image_url)) return false;
-    seen.add(p.image_url);
+    const key = p.video_url || p.image_url;
+    if (!key) return true; // keep items without any media just in case
+    if (seen.has(key)) return false;
+    seen.add(key);
     return true;
   });
 }
 
 export default function HomeClient({ projects }: HomeClientProps) {
+  const [isPreloading, setIsPreloading] = useState(true);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [view, setView] = useState<"LIST" | "GRID">("LIST");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -69,11 +74,24 @@ export default function HomeClient({ projects }: HomeClientProps) {
 
   // Filter projects by category, then deduplicate by image
   const filteredProjects = useMemo(() => {
-    const byCategory =
-      activeCategory === "ALL"
-        ? projects
-        : projects.filter((p) => p.category === activeCategory);
-    return deduplicateByImage(byCategory);
+    let byCategory = projects;
+
+    if (activeCategory === "ALL") {
+      byCategory = projects.filter(
+        (p) =>
+          p.category === "STARTUPS" ||
+          p.category === "FULL-STACK" ||
+          p.title === "Qubits For Change" ||
+          p.title === "20 Days of Quantum Computing Challenge ⚛️" ||
+          p.title === "BOSC Website — bosc.org.np" ||
+          p.title === "Best Functional prototype : Raksha-Net" ||
+          p.title === "Sortrace"
+      );
+    } else {
+      byCategory = projects.filter((p) => p.category === activeCategory);
+    }
+
+    return deduplicateByMedia(byCategory);
   }, [activeCategory, projects]);
 
   // Current display project (the active carousel slide)
@@ -95,7 +113,12 @@ export default function HomeClient({ projects }: HomeClientProps) {
   }, []);
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden">
+    <main
+      className={`relative w-screen h-screen overflow-hidden ${isPreloading ? "pointer-events-none" : ""
+        }`}
+    >
+      {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
+
       <Header
         theme={theme}
         onToggleTheme={toggleTheme}
