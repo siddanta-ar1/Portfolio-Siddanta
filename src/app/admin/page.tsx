@@ -759,15 +759,30 @@ export default function AdminPage() {
                 return (
                   <div key={p.id} className="admin-row">
                     {/* Thumbnail */}
-                    <div className="admin-row-thumb">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={thumb}
-                        alt={p.title}
-                        onError={(e) => {
-                          e.currentTarget.src = getPlaceholderByCategory(p.category);
-                        }}
-                      />
+                    <div className="admin-row-thumb relative">
+                      {p.video_url ? (
+                        <video
+                          src={p.video_url}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={thumb}
+                          alt={p.title}
+                          onError={(e) => {
+                            e.currentTarget.src = getPlaceholderByCategory(p.category);
+                          }}
+                        />
+                      )}
                     </div>
 
                     {/* Title + description */}
