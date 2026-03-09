@@ -40,14 +40,19 @@ export default function Header({
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 z-100 flex items-center justify-between w-full px-8 py-6 pointer-events-none">
+    <header className="fixed top-0 left-0 z-100 flex items-center justify-between w-full px-4 py-4 md:px-8 md:py-6 pointer-events-none">
+      {/* Logo — always visible */}
       <span className="text-sm font-bold uppercase tracking-[0.14em] text-[var(--foreground)] select-none pointer-events-auto whitespace-nowrap">
         SIDDANTA
       </span>
-      <span className="text-sm font-bold text-[var(--foreground)] opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap">
+
+      {/* Clock — hidden on mobile */}
+      <span className="hidden md:inline text-sm font-bold text-[var(--foreground)] opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap">
         {time}
       </span>
-      <div className="flex items-center gap-2 pointer-events-auto font-[family-name:var(--font-geist-mono)]">
+
+      {/* Theme toggle — hidden on mobile (accessible via Menu overlay) */}
+      <div className="hidden md:flex items-center gap-2 pointer-events-auto font-[family-name:var(--font-geist-mono)]">
         <button
           onClick={theme === "light" ? undefined : onToggleTheme}
           className={`bg-transparent border-none text-sm font-bold uppercase cursor-pointer p-0 transition-colors duration-300 ${theme === "light" ? "text-[var(--foreground)]" : "text-gray-400"
@@ -66,12 +71,16 @@ export default function Header({
           DARK
         </button>
       </div>
+
+      {/* Email — hidden on mobile */}
       <a
         href="mailto:siddanta.sodari@proton.me"
-        className="text-sm font-bold lowercase tracking-normal text-[var(--foreground)] no-underline transition-opacity duration-300 hover:opacity-60 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap"
+        className="hidden md:inline text-sm font-bold lowercase tracking-normal text-[var(--foreground)] no-underline transition-opacity duration-300 hover:opacity-60 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap"
       >
         siddanta.sodari@proton.me
       </a>
+
+      {/* MENU — always visible */}
       <button
         className="flex items-center gap-2.5 bg-transparent border-none text-[var(--foreground)] text-sm font-bold uppercase cursor-pointer p-0 transition-opacity duration-300 hover:opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap"
         onClick={onMenuOpen}

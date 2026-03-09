@@ -202,7 +202,7 @@ export default function MenuOverlay({
       </div>
 
       {/* ── Navigation — Centered ── */}
-      <nav className="flex-1 flex items-center justify-center px-8 md:px-16 pb-8 md:pb-12">
+      <nav className="flex-1 flex items-center justify-center px-4 md:px-16 pb-6 md:pb-12 overflow-y-auto">
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-x-10 md:gap-y-5 max-w-[1000px]">
           {menuItems.map((item) => {
             const isActive = activeCategory === item.label;
@@ -270,8 +270,11 @@ export default function MenuOverlay({
       </div>
 
       {/* ── Menu Footer — Thin divider line, legal left, socials + copyright right ── */}
-      <div className="flex-shrink-0 border-t border-white/[0.12] mx-8 md:mx-14 lg:mx-20">
-        <div className="flex items-center justify-between py-5">
+      <div className="flex-shrink-0 border-t border-white/[0.12] mx-4 md:mx-14 lg:mx-20">
+        <div
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 py-4 sm:py-5"
+          style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom, 16px))" }}
+        >
           {/* Left: Legal */}
           <span className="text-xs font-bold text-white/25 font-[family-name:var(--font-geist-mono)]">
             Legal Disclaimer

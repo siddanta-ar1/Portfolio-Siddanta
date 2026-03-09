@@ -103,11 +103,11 @@ export default function Footer({
     <>
       {/* ── Floating caption — positioned above the footer bar ── */}
       {captionText && (
-        <div className="fixed bottom-16 left-0 z-100 w-full flex justify-center pointer-events-none">
+        <div className="fixed bottom-16 left-0 z-100 w-full flex justify-center px-4 pointer-events-none">
           <span
             key={currentProject?.id ?? "empty-caption"}
             ref={captionRef}
-            className="text-sm font-bold not-italic tracking-normal text-[var(--foreground)] max-w-[600px] whitespace-nowrap overflow-hidden text-ellipsis pointer-events-auto"
+            className="text-sm font-bold not-italic tracking-normal text-[var(--foreground)] max-w-[90vw] md:max-w-[600px] text-center whitespace-normal md:whitespace-nowrap overflow-hidden text-ellipsis pointer-events-auto"
             style={{
               fontFamily: "var(--font-sans), system-ui, sans-serif",
             }}
@@ -118,7 +118,7 @@ export default function Footer({
       )}
 
       {/* ── Footer bar — single clean row ── */}
-      <footer className="fixed bottom-0 left-0 z-100 flex items-center justify-between w-full px-8 py-6 pointer-events-none">
+      <footer className="fixed bottom-0 left-0 z-100 flex items-center justify-between w-full px-4 py-3 sm:px-8 sm:py-6 pointer-events-none">
         <div className="pointer-events-auto flex items-center gap-4">
           <a
             href="https://instagram.com"
@@ -185,7 +185,7 @@ export default function Footer({
         </div>
 
         <span
-          className="pointer-events-auto text-right text-sm font-bold tracking-normal normal-case text-[var(--foreground)]"
+          className="hidden md:inline pointer-events-auto text-right text-sm font-bold tracking-normal normal-case text-[var(--foreground)]"
           style={{
             fontFamily: "var(--font-mono), monospace",
           }}

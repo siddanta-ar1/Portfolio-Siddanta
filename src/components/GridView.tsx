@@ -82,9 +82,9 @@ export default function GridView({
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[1] overflow-y-auto overflow-x-hidden scrollbar-none pt-24 pb-36 px-12 md:px-16 lg:px-20 xl:px-24"
+      className="fixed inset-0 z-[1] overflow-y-auto overflow-x-hidden scrollbar-none pt-20 pb-28 px-4 sm:px-8 md:px-16 lg:px-20 xl:px-24"
     >
-      <div className="group grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10 lg:gap-14 xl:gap-16 max-w-[1600px] mx-auto">
+      <div className="group grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 lg:gap-14 xl:gap-16 max-w-[1600px] mx-auto">
         {filteredProjects.map((project, index) => (
           <div
             key={project.id}
@@ -100,7 +100,7 @@ export default function GridView({
                 video.currentTime = 0; // Optional: Reset to start when mouse leaves, making it a true "preview hover"
               }
             }}
-            className="grid-curl-item cursor-pointer overflow-hidden h-[170px] md:h-[210px] lg:h-[250px] xl:h-[280px] transition-opacity duration-500 ease-out group-hover:opacity-30 hover:!opacity-100"
+            className="grid-curl-item cursor-pointer overflow-hidden h-[140px] sm:h-[170px] md:h-[210px] lg:h-[250px] xl:h-[280px] transition-opacity duration-500 ease-out group-hover:opacity-30 hover:!opacity-100"
             style={{ backgroundColor: "var(--background)", willChange: "transform, opacity" }}
           >
             {project.video_url ? (
