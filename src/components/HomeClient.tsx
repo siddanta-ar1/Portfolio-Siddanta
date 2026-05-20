@@ -121,6 +121,7 @@ export default function HomeClient({ projects }: HomeClientProps) {
 
       <Header
         theme={theme}
+        time={time}
         onToggleTheme={toggleTheme}
         onMenuOpen={() => setMenuOpen(true)}
       />

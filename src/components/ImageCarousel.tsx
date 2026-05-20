@@ -434,9 +434,9 @@ export default function ImageCarousel({
               />
             ) : project.category === "RESEARCH" ? (
               <div
-                className="flex items-center justify-center font-mono text-sm tracking-widest text-foreground opacity-30 select-none uppercase border border-foreground/10"
+                className="flex items-center justify-center font-mono text-[10px] tracking-widest text-foreground opacity-30 select-none uppercase border border-foreground/10"
                 style={{
-                  width: "300px",
+                  width: `${slideWidth}px`,
                   height: `${Math.min(maxImgHeight, 400)}px`,
                   pointerEvents: "none",
                 }}

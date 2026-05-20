@@ -1,72 +1,41 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-
 interface HeaderProps {
   theme: "light" | "dark";
+  time: string;
   onToggleTheme: () => void;
   onMenuOpen: () => void;
 }
 
-export default function Header({
-  theme,
-  onToggleTheme,
-  onMenuOpen,
-}: HeaderProps) {
-  const [time, setTime] = useState<string>("");
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    const tick = () => {
-      const now = new Date();
-      const nptOffset = 5 * 60 + 45;
-      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-      const npt = new Date(utc + nptOffset * 60000);
-
-      const hours = npt.getHours();
-      const minutes = npt.getMinutes().toString().padStart(2, "0");
-      const seconds = npt.getSeconds().toString().padStart(2, "0");
-      const ampm = hours >= 12 ? "PM" : "AM";
-      const displayHour = (hours % 12 || 12).toString().padStart(2, "0");
-
-      setTime(`NPT - ${displayHour}:${minutes}:${seconds} ${ampm}`);
-    };
-
-    tick();
-    intervalRef.current = setInterval(tick, 1000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
-
+export default function Header({ theme, time, onToggleTheme, onMenuOpen }: HeaderProps) {
   return (
-    <header className="fixed top-0 left-0 z-100 flex items-center justify-between w-full px-4 py-4 md:px-8 md:py-6 pointer-events-none">
-      {/* Logo — always visible */}
-      <span className="text-sm font-bold uppercase tracking-[0.14em] text-[var(--foreground)] select-none pointer-events-auto whitespace-nowrap">
+    <header className="fixed top-0 left-0 z-[100] flex items-center justify-between w-full px-4 sm:px-8 pointer-events-none safe-top">
+      {/* Logo */}
+      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--foreground)] select-none pointer-events-auto font-[family-name:var(--font-geist-sans)]">
         SIDDANTA
       </span>
 
       {/* Clock — hidden on mobile */}
-      <span className="hidden md:inline text-sm font-bold text-[var(--foreground)] opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap">
+      <span className="hidden md:inline text-[10px] font-medium tracking-[0.1em] uppercase text-[var(--foreground)] opacity-45 pointer-events-auto font-[family-name:var(--font-geist-mono)]">
         {time}
       </span>
 
-      {/* Theme toggle — hidden on mobile (accessible via Menu overlay) */}
+      {/* Theme toggle — hidden on mobile, accessible via Menu overlay */}
       <div className="hidden md:flex items-center gap-2 pointer-events-auto font-[family-name:var(--font-geist-mono)]">
         <button
           onClick={theme === "light" ? undefined : onToggleTheme}
-          className={`bg-transparent border-none text-sm font-bold uppercase cursor-pointer p-0 transition-colors duration-300 ${theme === "light" ? "text-[var(--foreground)]" : "text-gray-400"
-            }`}
+          className={`bg-transparent border-none text-[10px] font-bold uppercase tracking-[0.14em] cursor-pointer p-0 transition-colors duration-300 ${
+            theme === "light" ? "text-[var(--foreground)]" : "text-[var(--muted)]"
+          }`}
         >
           LIGHT
         </button>
-        <span className="text-sm text-[var(--foreground)] opacity-20 select-none">
-          |
-        </span>
+        <span className="text-[10px] text-[var(--muted)] opacity-40 select-none font-light">|</span>
         <button
           onClick={theme === "dark" ? undefined : onToggleTheme}
-          className={`bg-transparent border-none text-sm font-bold uppercase cursor-pointer p-0 transition-colors duration-300 ${theme === "dark" ? "text-[var(--foreground)]" : "text-gray-400"
-            }`}
+          className={`bg-transparent border-none text-[10px] font-bold uppercase tracking-[0.14em] cursor-pointer p-0 transition-colors duration-300 ${
+            theme === "dark" ? "text-[var(--foreground)]" : "text-[var(--muted)]"
+          }`}
         >
           DARK
         </button>
@@ -75,18 +44,18 @@ export default function Header({
       {/* Email — hidden on mobile */}
       <a
         href="mailto:siddanta.sodari@proton.me"
-        className="hidden md:inline text-sm font-bold lowercase tracking-normal text-[var(--foreground)] no-underline transition-opacity duration-300 hover:opacity-60 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap"
+        className="hidden md:inline text-[10px] font-medium tracking-[0.08em] uppercase text-[var(--foreground)] no-underline opacity-45 transition-opacity duration-300 hover:opacity-100 pointer-events-auto font-[family-name:var(--font-geist-mono)]"
       >
         siddanta.sodari@proton.me
       </a>
 
       {/* MENU — always visible */}
       <button
-        className="flex items-center gap-2.5 bg-transparent border-none text-[var(--foreground)] text-sm font-bold uppercase cursor-pointer p-0 transition-opacity duration-300 hover:opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto whitespace-nowrap"
+        className="flex items-center gap-2.5 bg-transparent border-none text-[var(--foreground)] text-[10px] font-bold uppercase tracking-[0.14em] cursor-pointer p-0 transition-opacity duration-300 hover:opacity-50 font-[family-name:var(--font-geist-mono)] pointer-events-auto"
         onClick={onMenuOpen}
       >
         <span>MENU</span>
-        <span className="text-sm leading-none">○</span>
+        <span className="w-3 h-3 rounded-full border-[1.5px] border-[var(--foreground)] transition-all duration-300 group-hover:bg-[var(--foreground)] group-hover:scale-110 inline-block" />
       </button>
     </header>
   );
