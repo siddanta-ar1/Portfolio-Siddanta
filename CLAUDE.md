@@ -23,6 +23,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_ADMIN_PASSWORD=your-admin-password
 ```
 
+Optional, server-only (never prefix with `NEXT_PUBLIC_`): `SOCIAL_ADMIN_SECRET` plus per-platform credentials for social publishing — full list and setup in `docs/social-automation.md`.
+
 `src/lib/supabase.ts` returns `null` when env vars are missing — the app renders with an empty project list rather than crashing.
 
 The Supabase schema is in `supabase-schema.sql`; run it in the Supabase Dashboard SQL Editor to create the `projects` table, storage bucket, and RLS policies.
@@ -34,6 +36,12 @@ The Supabase schema is in `supabase-schema.sql`; run it in the Supabase Dashboar
 `src/app/page.tsx` is a **server component** with `export const revalidate = 60` (ISR). It fetches all projects from Supabase, applies a hardcoded `VIDEO_MAP` (title → Supabase Storage video URL), and handles the **KKhane special case** (one DB row expanded into two synthetic sub-project entries). The transformed list is passed to `HomeClient`.
 
 `src/components/HomeClient.tsx` is the **client-side orchestrator**. It holds all UI state: `theme`, `view` (LIST/GRID), `activeCategory`, `activeIndex`, and the Nepal Time clock. It filters projects by category, deduplicates by `video_url || image_url`, and distributes data down to leaf components. The "ALL" category filter hardcodes which categories/titles appear (STARTUPS, FULL-STACK, and specific QUANTUM/COMMUNITY/AWARDS entries).
+
+`src/lib/projects.ts` (`getPortfolioProjects`) owns that fetch + transform + CV merge; reuse it rather than querying Supabase directly. Static CV entries live in `src/data/cv.ts`.
+
+### Social publishing
+
+`/admin` → **Share** opens `SharePanel`, which calls `/api/social` (GET = which platforms are configured, POST = publish or `dryRun`). The route is gated by `SOCIAL_ADMIN_SECRET`, not the admin password (that one is `NEXT_PUBLIC_` and ships to the browser). Publishers live in `src/lib/social/` — one `Platform` per file, plain `fetch`, no SDKs; `publishAll` isolates failures per platform. Posts link to `/p/[id]`, which carries per-project Open Graph tags. Google Sites embeds `/embed`; `/feed.xml` is RSS for IFTTT/Zapier-style fallbacks. `next.config.ts` rewrites `/media/*` to Supabase public storage so TikTok can pull media from a verified domain.
 
 ### GSAP carousel (`ImageCarousel.tsx`)
 

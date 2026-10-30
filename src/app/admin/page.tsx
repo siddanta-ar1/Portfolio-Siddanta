@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Project, ProjectLink } from "@/types/project";
 import { getPlaceholderByCategory } from "@/lib/placeholder";
+import SharePanel from "@/components/admin/SharePanel";
 
 // ── Supabase client (client-side) ─────────────────────────────────────────
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
@@ -75,6 +76,9 @@ export default function AdminPage() {
 
   // Flash message
   const [flash, setFlash] = useState("");
+
+  // Project being shared to socials (null = panel closed)
+  const [sharing, setSharing] = useState<Project | null>(null);
 
   // ── Hydrate auth from sessionStorage ────────────────────────────────────
   useEffect(() => {
@@ -803,6 +807,13 @@ export default function AdminPage() {
                     <div className="admin-row-actions">
                       <button
                         className="admin-btn admin-btn-ghost"
+                        onClick={() => setSharing(p)}
+                        style={{ padding: "6px 12px" }}
+                      >
+                        Share
+                      </button>
+                      <button
+                        className="admin-btn admin-btn-ghost"
                         onClick={() => startEdit(p)}
                         style={{ padding: "6px 12px" }}
                       >
@@ -823,6 +834,8 @@ export default function AdminPage() {
           </>
         )}
       </div>
+
+      {sharing && <SharePanel project={sharing} onClose={() => setSharing(null)} />}
     </div>
   );
 }
