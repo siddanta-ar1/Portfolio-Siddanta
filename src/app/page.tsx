@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Project } from "@/types/project";
 import HomeClient from "@/components/HomeClient";
+import { mergeCvEntries } from "@/data/cv";
 
 export const revalidate = 60; // ISR: revalidate every 60 seconds
 
@@ -104,5 +105,6 @@ export default async function Home() {
     enhancedProjects.push(enhanced);
   }
 
-  return <HomeClient projects={enhancedProjects} />;
+  // 3) Append static CV entries (merged after the loop so the AWARDS image overrides above don't touch them)
+  return <HomeClient projects={mergeCvEntries(enhancedProjects)} />;
 }

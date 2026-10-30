@@ -115,9 +115,15 @@ const jsonLd = [
       "https://github.com/siddanta-ar1",
       "https://linkedin.com/in/siddanta-sodari-08596a335",
     ],
-    jobTitle: "Full Stack Developer",
+    jobTitle: "Founder & CEO, O.M.X Lab · Full-Stack & Applied AI Engineer",
     description:
-      "Full Stack Developer, Quantum Computing Enthusiast & Community Builder from Chitwan, Nepal.",
+      "Founder & CEO of O.M.X Lab, full-stack & applied AI engineer, LumbiniX 2026 national hackathon winner and BSc CSIT student at Tribhuvan University, Chitwan, Nepal.",
+    alumniOf: { "@type": "CollegeOrUniversity", name: "Tribhuvan University" },
+    award: [
+      "Winner, LumbiniX 2026 National Hackathon",
+      "3rd Position, CODEFEST Chitwan 2025",
+      "Best Functional Prototype, Ideathon 2025",
+    ],
     knowsAbout: [
       "Full Stack Development",
       "React",
@@ -128,6 +134,10 @@ const jsonLd = [
       "Quantum Computing",
       "GSAP",
       "Node.js",
+      "Machine Learning",
+      "Computer Vision",
+      "Retrieval-Augmented Generation",
+      "React Native",
     ],
     nationality: { "@type": "Country", name: "Nepal" },
     address: {
